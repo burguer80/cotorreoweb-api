@@ -14,7 +14,12 @@ Rails.application.routes.draw do
                  sessions: 'sessions',
                  registrations: 'registrations'
              }
+
+  authenticate :user do
+    resources :posts, only: [:new, :create, :edit, :update, :destroy]
+  end
+
   resources :users
-  resources :posts
+  resources :posts, only: [:index]
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

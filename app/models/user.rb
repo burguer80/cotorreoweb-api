@@ -6,5 +6,6 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :jwt_authenticatable,
          :registerable,
+         :lockable,
          jwt_revocation_strategy: JWTBlacklist
 end

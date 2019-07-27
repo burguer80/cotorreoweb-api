@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  # include ::ActionController::Serialization
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from CanCan::AccessDenied, with: :role_access_denied
 
@@ -20,7 +21,7 @@ class ApplicationController < ActionController::API
   end
 
   def role_access_denied
-    error_response(:unauthorized, 'Role access denied')
+    error_response(:unauthorized, 'Access denied')
   end
 
   def record_not_found

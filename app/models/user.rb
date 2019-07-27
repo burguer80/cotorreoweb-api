@@ -9,8 +9,8 @@ class User < ApplicationRecord
          :lockable,
          jwt_revocation_strategy: JWTBlacklist
 
-  enum role: [:user, :admin, :god]
-  after_initialize :set_default_role, :if => :new_record?
+  enum role: %i[user admin god]
+  after_initialize :set_default_role, if:  :new_record?
 
   def set_default_role
     self.role ||= :user

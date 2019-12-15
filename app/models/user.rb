@@ -12,6 +12,8 @@ class User < ApplicationRecord
   enum role: %i[user admin god]
   after_initialize :set_default_role, if: :new_record?
 
+  has_many :posts
+
   def set_default_role
     self.role ||= :user
   end

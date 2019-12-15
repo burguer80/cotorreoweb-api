@@ -6,7 +6,7 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.where(status: :published)
-    render json: PostSerializer.new(@posts), status: :ok
+    render json: PostSerializer.new(@posts.includes(:user)), status: :ok
   end
 
   # GET /posts/1

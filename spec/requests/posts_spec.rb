@@ -4,11 +4,22 @@ require 'devise/jwt/test_helpers'
 RSpec.describe 'Posts', type: :request do
 
   describe 'GET Posts' do
-    before { get '/posts' }
 
     it 'should return OK' do
+      get '/posts'
       expect(payload).not_to be_empty
       expect(response).to have_http_status(200)
+    end
+
+    describe 'Search' do
+      let!(:first_post) { create(:published_post, title: 'First Post') }
+      let!(:second_post) { create(:published_post, title: 'Second Post') }
+      let!(:third_post) { create(:published_post, title: 'Third One') }
+
+      it 'should filter posts by title' do
+        get '/posts?search=Post'
+        expect(payload['data'].size).to eq(2)
+      end
     end
 
     describe 'with DB data' do
@@ -104,7 +115,7 @@ RSpec.describe 'Posts', type: :request do
   end
 
   def valid_auth_headers(user)
-    headers = {'Accept' => 'application/json'}
+    headers = {'Accept': 'application/json'}
     Devise::JWT::TestHelpers.auth_headers(headers, user)
   end
 end

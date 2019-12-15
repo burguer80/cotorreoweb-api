@@ -7,7 +7,6 @@ RSpec.describe 'Posts', type: :request do
     before { get '/posts' }
 
     it 'should return OK' do
-      payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(response).to have_http_status(200)
     end
@@ -17,7 +16,6 @@ RSpec.describe 'Posts', type: :request do
       before { get '/posts' }
 
       it 'should return published posts' do
-        payload = JSON.parse(response.body)
         expect(payload['data'].size).to eq(posts.size)
       end
     end
@@ -28,7 +26,6 @@ RSpec.describe 'Posts', type: :request do
 
     it 'should return a post' do
       get "/posts/#{post.id}"
-      payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(payload['data']['id'].to_i).to eq(post.id)
       expect(payload['data']['attributes']['title']).to eq(post.title)
@@ -43,7 +40,6 @@ RSpec.describe 'Posts', type: :request do
 
     it 'should create a post' do
       post '/posts', params: valid_payload, headers: valid_auth_headers(user)
-      payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(payload['data']['id']).not_to be_empty
       expect(response).to have_http_status(:created)
@@ -51,7 +47,6 @@ RSpec.describe 'Posts', type: :request do
 
     it 'should return error message on invalid post' do
       post '/posts', params: invalid_payload, headers: valid_auth_headers(user)
-      payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -63,7 +58,6 @@ RSpec.describe 'Posts', type: :request do
 
     it 'should update a post' do
       put "/posts/#{article.id}", params: valid_payload, headers: valid_auth_headers(user)
-      payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(payload['data']['id'].to_i).to eq(article.id)
       expect(payload['data']['attributes']['title']).to eq(valid_payload[:post][:title])
@@ -74,7 +68,6 @@ RSpec.describe 'Posts', type: :request do
 
     it 'should return error message on invalid post' do
       put "/posts/#{article.id}", params: invalid_payload, headers: valid_auth_headers(user)
-      payload = JSON.parse(response.body)
       expect(payload).not_to be_empty
       expect(response).to have_http_status(:unprocessable_entity)
     end
@@ -90,6 +83,10 @@ RSpec.describe 'Posts', type: :request do
         status: 'draft'
       }
     }
+  end
+
+  def payload
+    JSON.parse(response.body)
   end
 
   def valid_payload

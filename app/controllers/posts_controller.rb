@@ -6,6 +6,10 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.where(status: :published)
+    if !params[:search].nil? && params[:search].present?
+      @posts = PostsSearchService.search(@posts, params[:search])
+    end
+
     render json: PostSerializer.new(@posts.includes(:user)), status: :ok
   end
 

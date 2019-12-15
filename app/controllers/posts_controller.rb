@@ -5,39 +5,30 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
-
-    render json: PostSerializer.new(@posts)
+    @posts = Post.where(status: :published)
+    render json: PostSerializer.new(@posts), status: :ok
   end
 
   # GET /posts/1
   def show
-    render json: PostSerializer.new(@post)
+    render json: PostSerializer.new(@post), status: :ok
   end
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
-
-    if @post.save
-      render json: PostSerializer.new(@post), status: :created, location: @post
-    else
-      render json: @post.errors, status: :unprocessable_entity
-    end
+    @post = Post.create!(post_params)
+    render json: PostSerializer.new(@post), status: :created, location: @post
   end
 
   # PATCH/PUT /posts/1
   def update
-    if @post.update(post_params)
-      render json: PostSerializer.new(@post)
-    else
-      render json: @post.errors, status: :unprocessable_entity
-    end
+    @post.update!(post_params)
+    render json: PostSerializer.new(@post)
   end
 
   # DELETE /posts/1
   def destroy
-    @post.destroy
+    @post.destroy!
   end
 
   private

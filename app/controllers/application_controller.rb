@@ -1,9 +1,19 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
-  # include ::ActionController::Serialization
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  rescue_from CanCan::AccessDenied, with: :role_access_denied
+  rescue_from Exception do |e|
+    log.error "#{e.message}"
+    render json: {error: e.message}, status: :internal_error
+  end
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: {error: e.message}, status: :unprocessable_entity
+  end
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: {error: e.message}, status: :not_found
+  end
+  rescue_from CanCan::AccessDenied do |e|
+    render json: {error: e.message}, status: :unauthorized
+  end
 
 
   def render_resource(resource)

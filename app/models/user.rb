@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  validates_uniqueness_of :email
+  validates :email, uniqueness: true
 
   devise :database_authenticatable,
          :jwt_authenticatable,
@@ -10,7 +10,7 @@ class User < ApplicationRecord
          jwt_revocation_strategy: JWTBlacklist
 
   enum role: %i[user admin god]
-  after_initialize :set_default_role, if:  :new_record?
+  after_initialize :set_default_role, if: :new_record?
 
   def set_default_role
     self.role ||= :user

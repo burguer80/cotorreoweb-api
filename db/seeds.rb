@@ -1,12 +1,43 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-User.create(email: 'burguer@gmail.com', password: 'admin admin admin', password_confirmation: 'admin admin admin', role: 2)
+def create_users
+  p 'Creating god user'
+  User.create(
+    name: Faker::Name.first_name,
+    last_name: Faker::Name.last_name,
+    email: 'burguer@gmail.com',
+    password: 'admin admin admin',
+    password_confirmation: 'admin admin admin',
+    role: :god)
 
-Post.create(title: 'Post 1', body: 'Body text')
-Post.create(title: 'Post 2', body: 'Body text')
-Post.create(title: 'Post 3', body: 'Body text')
+  p 'Creating users'
+  10.times do
+    User.create(
+      name: Faker::Name.first_name,
+      last_name: Faker::Name.last_name,
+      email: Faker::Internet.email,
+      password: 'user user user',
+      password_confirmation: 'user user user',
+      role: :user)
+  end
+
+  p "#{User.count} users are stored."
+end
+
+def create_posts
+  p 'Creating posts'
+  posts = []
+  users_ids = User.ids
+  50.times do
+    posts << {
+      title: Faker::Lorem.sentence,
+      body: Faker::Lorem.paragraph,
+      status: Post.statuses.values[rand(2)],
+      user_id: users_ids.sample,
+      created_at: DateTime.now,
+      updated_at: DateTime.now}
+  end
+  Post.insert_all(posts)
+  p "#{Post.count} posts are stored."
+end
+
+create_users
+create_posts

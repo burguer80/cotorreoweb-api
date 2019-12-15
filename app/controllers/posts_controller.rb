@@ -6,7 +6,7 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.where(status: :published)
-    render json: PostSerializer.new(@posts), status: :ok
+    render json: PostSerializer.new(@posts.includes(:user)), status: :ok
   end
 
   # GET /posts/1
@@ -40,6 +40,6 @@ class PostsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def post_params
-    params.require(:post).permit(:title, :body, :status)
+    params.require(:post).permit(:title, :body, :status, :user_id)
   end
 end

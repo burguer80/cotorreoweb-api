@@ -39,5 +39,7 @@ def create_posts
   p "#{Post.count} posts are stored."
 end
 
-create_users
-create_posts
+if Rails.env.development?
+  create_users
+  create_posts
+end

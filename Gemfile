@@ -61,3 +61,6 @@ gem 'devise-jwt'
 gem 'devise'
 gem "cancancan"
 gem 'fast_jsonapi'
+
+gem 'redis'
+gem 'hiredis'

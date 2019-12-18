@@ -20,4 +20,8 @@ Rails.application.routes.draw do
   resources :posts, only: [:index, :show]
   resources :health, only: [:index]
   resources :users
+
+
+  # Dokku
+  get '/check.txt', to: proc {[200, {}, ['it_works']]}
 end

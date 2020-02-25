@@ -64,3 +64,4 @@ gem 'fast_jsonapi'
 
 gem 'redis'
 gem 'hiredis'
+gem 'sidekiq'

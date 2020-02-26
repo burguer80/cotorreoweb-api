@@ -65,3 +65,5 @@ gem 'fast_jsonapi'
 gem 'redis'
 gem 'hiredis'
 gem 'sidekiq'
+
+gem 'dry-configurable', '0.9.0'

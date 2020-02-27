@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_26_195211) do
+ActiveRecord::Schema.define(version: 2020_02_27_024424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "jwt_blacklist", force: :cascade do |t|
     t.string "jti", null: false

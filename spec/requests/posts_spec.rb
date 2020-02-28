@@ -7,7 +7,7 @@ RSpec.describe 'Posts', type: :request do
 
     it 'should return OK' do
       get '/posts'
-      expect(payload).not_to be_empty
+      expect(payload).to be_truthy
       expect(response).to have_http_status(200)
     end
 
@@ -18,7 +18,7 @@ RSpec.describe 'Posts', type: :request do
 
       it 'should filter posts by title' do
         get '/posts?search=Post'
-        expect(payload['posts'].size).to eq(2)
+        expect(payload.size).to eq(2)
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe 'Posts', type: :request do
       before { get '/posts' }
 
       it 'should return published posts' do
-        expect(payload['posts'].size).to eq(posts.size)
+        expect(payload.size).to eq(posts.size)
       end
     end
   end
@@ -40,10 +40,10 @@ RSpec.describe 'Posts', type: :request do
     it 'should return a post' do
       get "/posts/#{post.id}"
       expect(payload).not_to be_empty
-      expect(payload['post']['id'].to_i).to eq(post.id)
-      expect(payload['post']['title']).to eq(post.title)
-      expect(payload['post']['body']).to eq(post.body)
-      expect(payload['post']['status']).to eq(post.status)
+      expect(payload['id'].to_i).to eq(post.id)
+      expect(payload['title']).to eq(post.title)
+      expect(payload['body']).to eq(post.body)
+      expect(payload['status']).to eq(post.status)
       expect(response).to have_http_status(200)
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe 'Posts', type: :request do
     it 'should create a post' do
       post '/posts', params: valid_payload(user), headers: valid_auth_headers(user)
       expect(payload).not_to be_empty
-      expect(payload['post']['id']).to be_truthy
+      expect(payload['id']).to be_truthy
       expect(response).to have_http_status(:created)
     end
 
@@ -72,10 +72,10 @@ RSpec.describe 'Posts', type: :request do
     it 'should update a post' do
       put "/posts/#{article.id}", params: valid_payload(user), headers: valid_auth_headers(user)
       expect(payload).not_to be_empty
-      expect(payload['post']['id'].to_i).to eq(article.id)
-      expect(payload['post']['title']).to eq(valid_payload(user)[:post][:title])
-      expect(payload['post']['body']).to eq(valid_payload(user)[:post][:body])
-      expect(payload['post']['status']).to eq(valid_payload(user)[:post][:status])
+      expect(payload['id'].to_i).to eq(article.id)
+      expect(payload['title']).to eq(valid_payload(user)[:post][:title])
+      expect(payload['body']).to eq(valid_payload(user)[:post][:body])
+      expect(payload['status']).to eq(valid_payload(user)[:post][:status])
       expect(response).to have_http_status(:ok)
     end
 

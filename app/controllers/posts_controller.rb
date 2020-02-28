@@ -10,24 +10,24 @@ class PostsController < ApplicationController
       @posts = PostsSearchService.search(@posts, params[:search])
     end
 
-    render json: @posts, adapter: :json, status: :ok
+    render json: serialized_posts, status: :ok
   end
 
   # GET /posts/1
   def show
-    render json: @post, adapter: :json, status: :ok
+    render json: serialized_post, status: :ok
   end
 
   # POST /posts
   def create
     @post = Post.create!(post_params)
-    render json: @post, adapter: :json, status: :created, location: @post
+    render json: serialized_post, status: :created, location: @post
   end
 
   # PATCH/PUT /posts/1
   def update
     @post.update!(post_params)
-    render json: @post, adapter: :json
+    render json: serialized_post
   end
 
   # DELETE /posts/1
@@ -37,13 +37,30 @@ class PostsController < ApplicationController
 
   private
 
+  # Only allow a trusted parameter "white list" through.
+  def post_params
+    params.require(:post).permit(:title, :body, :status, :user_id)
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_post
     @post = Post.find(params[:id])
   end
 
-  # Only allow a trusted parameter "white list" through.
-  def post_params
-    params.require(:post).permit(:title, :body, :status, :user_id)
+  def serialized_post
+    @post.as_json(only: [:id, :title, :body, :status, :created_at, :updated_at], include: {
+      user: {
+        only: [:id, :name, :last_name]
+      }
+    })
   end
+
+  def serialized_posts
+    @posts.as_json(only: [:id, :title], include: {
+      user: {
+        only: [:id, :name, :last_name]
+      }
+    })
+  end
+
 end

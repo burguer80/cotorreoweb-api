@@ -10,24 +10,24 @@ class PostsController < ApplicationController
       @posts = PostsSearchService.search(@posts, params[:search])
     end
 
-    render json: PostSerializer.new(@posts.includes(:user)), status: :ok
+    render json: @posts, adapter: :json, status: :ok
   end
 
   # GET /posts/1
   def show
-    render json: PostSerializer.new(@post), status: :ok
+    render json: @post, adapter: :json, status: :ok
   end
 
   # POST /posts
   def create
     @post = Post.create!(post_params)
-    render json: PostSerializer.new(@post), status: :created, location: @post
+    render json: @post, adapter: :json, status: :created, location: @post
   end
 
   # PATCH/PUT /posts/1
   def update
     @post.update!(post_params)
-    render json: PostSerializer.new(@post)
+    render json: @post, adapter: :json
   end
 
   # DELETE /posts/1
